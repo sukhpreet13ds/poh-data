@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POH - Data</title>
+    <style>
+        :root {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --primary: #2563eb;
+            --primary-bg: #eff6ff;
+            --quote-border: #3b82f6;
+            --quote-bg: #f8fafc;
+            --table-header-bg: #f1f5f9;
+            --table-hover: #f8fafc;
+            --code-bg: #f1f5f9;
+            --code-text: #0f172a;
+            --star-color: #eab308;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 24px 16px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .nav-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .tab-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 9px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+        }
+
+        .tab-btn:not(.active) {
+            background-color: #ffffff;
+            color: #475569;
+        }
+
+        .tab-btn:not(.active):hover {
+            background-color: #f1f5f9;
+            color: #1e293b;
+            border-color: #cbd5e1;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px 28px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 20px 0 12px 0;
+        }
+
+        p {
+            margin-bottom: 14px;
+            color: var(--text-main);
+            font-size: 0.975rem;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin: 14px 0;
+            background: #ffffff;
+        }
+
+        .table-responsive::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.925rem;
+            min-width: 620px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--table-header-bg);
+            color: #334155;
+            font-weight: 600;
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 11px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: #1e293b;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover td {
+            background-color: var(--table-hover);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .totals-row td {
+            font-weight: 700;
+            background-color: #f8fafc;
+            border-top: 2px solid var(--border-color);
+            color: #0f172a;
+        }
+
+        code {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.875em;
+            border: 1px solid #e2e8f0;
+        }
+
+        .quote-box {
+            background-color: var(--quote-bg);
+            border-left: 4px solid var(--quote-border);
+            padding: 14px 18px;
+            margin: 14px 0 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #334155;
+        }
+
+        .finding-title {
+            font-weight: 600;
+            color: #0f172a;
+            margin-top: 16px;
+            margin-bottom: 4px;
+        }
+
+        .finding-text {
+            color: #334155;
+            margin-bottom: 14px;
+        }
+
+        .img-container {
+            width: 100%;
+            text-align: center;
+            padding: 8px 0;
+        }
+
+        .responsive-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .responsive-img:hover {
+            transform: scale(1.008);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modal Lightbox for Image Popout */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 95%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            animation: modalZoom 0.2s ease-out;
+            cursor: default;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 28px;
+            color: #ffffff;
+            font-size: 38px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+            user-select: none;
+        }
+
+        .modal-close:hover {
+            color: #cbd5e1;
+        }
+
+        @keyframes modalZoom {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 16px 10px;
+            }
+
+            .card {
+                padding: 18px 16px;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            th, td {
+                padding: 9px 12px;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-container">
+        <a href="index.html" class="tab-btn active">Events Data</a>
+        <a href="users.html" class="tab-btn">Users Data</a>
+    </nav>
+
+    <!-- Section 1 -->
+    <section class="card">
+        <h2>1. Executive Summary & Combined Event Data</h2>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th class="text-center">Total Count</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total Registered Users</td>
+                        <td class="text-center">615</td>
+                        <td>Visitor accounts created for the 2026 Parade of Homes</td>
+                    </tr>
+                    <tr>
+                        <td>SMS Program Opt-Ins</td>
+                        <td class="text-center">415</td>
+                        <td>67.5% opt-in rate for builder updates and contest alerts</td>
+                    </tr>
+                    <tr>
+                        <td>Total Check-Ins on Homes</td>
+                        <td class="text-center">1,038</td>
+                        <td>Physical home visits counted across all 23 model homes</td>
+                    </tr>
+                    <tr>
+                        <td>Total Star Ratings / Votes</td>
+                        <td class="text-center">834</td>
+                        <td>Aggregate votes submitted across all 23 model homes</td>
+                    </tr>
+                    <tr>
+                        <td>Active Registered Visitors</td>
+                        <td class="text-center">91</td>
+                        <td>Registered users with verified home visits attached</td>
+                    </tr>
+                    <tr>
+                        <td>Contest Qualifiers (8+ Check-Ins)</td>
+                        <td class="text-center">8</td>
+                        <td>Users who reached the 8-home milestone for the prize draw</td>
+                    </tr>
+                    <tr>
+                        <td>Unique Tagged Check-Ins (W2)</td>
+                        <td class="text-center">191</td>
+                        <td>Detailed timestamped user check-in rows in <code>UserCheckIn</code></td>
+                    </tr>
+                    <tr>
+                        <td>Unique Tagged Star Ratings (W2)</td>
+                        <td class="text-center">97</td>
+                        <td>Detailed timestamped user rating rows in <code>UserRating</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="card">
+        <h2>2. Weekend-by-Weekend & Chronological Breakdown</h2>
+        <div class="img-container">
+            <img src="Breakdown.png" alt="Breakdown" class="responsive-img" onclick="openModal(this.src)" title="Click to view full image">
+        </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="card">
+        <h2>3. Contest Qualifiers: Users with 8+ Check-Ins</h2>
+        <p>The official contest target is 8 home check-ins. The following 8 registered visitors have qualified:</p>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th>Visitor Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th class="text-center">ZIP</th>
+                        <th class="text-center">Reg Date</th>
+                        <th class="text-center">Total Check-Ins</th>
+                        <th class="text-center">Star Votes Cast</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">1</td>
+                        <td>Holly Holloway</td>
+                        <td><code>99holloway.h@gmail.com</code></td>
+                        <td>(352) 464-0695</td>
+                        <td class="text-center">34474</td>
+                        <td class="text-center">2026-11-14</td>
+                        <td class="text-center">10</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">2</td>
+                        <td>Christina Peters</td>
+                        <td><code>clpwgp@gmail.com</code></td>
+                        <td>(352) 235-4656</td>
+                        <td class="text-center">32666</td>
+                        <td class="text-center">2026-11-07</td>
+                        <td class="text-center">9</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">3</td>
+                        <td>Devindra Singh</td>
+                        <td><code>devindrasingh85@gmail.com</code></td>
+                        <td>(954) 464-1107</td>
+                        <td class="text-center">34476</td>
+                        <td class="text-center">2026-11-08</td>
+                        <td class="text-center">9</td>
+                        <td class="text-center">1</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">4</td>
+                        <td>Irene Kennwdy</td>
+                        <td><code>ontimebill@yahoo.com</code></td>
+                        <td>(856) 602-6316</td>
+                        <td class="text-center">34470</td>
+                        <td class="text-center">2026-11-14</td>
+                        <td class="text-center">9</td>
+                        <td class="text-center">8</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">5</td>
+                        <td>Payten Stromwall</td>
+                        <td><code>tyler7payten@gmail.com</code></td>
+                        <td>(352) 817-1580</td>
+                        <td class="text-center">34480</td>
+                        <td class="text-center">2026-11-13</td>
+                        <td class="text-center">8</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">6</td>
+                        <td>Terry Jones</td>
+                        <td><code>jomorway@yahoo.com</code></td>
+                        <td>(352) 566-0430</td>
+                        <td class="text-center">34475</td>
+                        <td class="text-center">2026-11-13</td>
+                        <td class="text-center">8</td>
+                        <td class="text-center">8</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">7</td>
+                        <td>Mary Martin</td>
+                        <td><code>mmartin@louvershop.com</code></td>
+                        <td>(352) 933-4628</td>
+                        <td class="text-center">34470</td>
+                        <td class="text-center">2026-11-13</td>
+                        <td class="text-center">8</td>
+                        <td class="text-center">8</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">8</td>
+                        <td>Jeffrey Straub</td>
+                        <td><code>straubdoesitright@gmail.com</code></td>
+                        <td>(706) 202-4154</td>
+                        <td class="text-center">34470</td>
+                        <td class="text-center">2026-11-14</td>
+                        <td class="text-center">8</td>
+                        <td class="text-center">7</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>High-Engagement Runners-Up (5 to 7 Check-Ins)</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Visitor Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th class="text-center">ZIP</th>
+                        <th class="text-center">Reg Date</th>
+                        <th class="text-center">Check-Ins</th>
+                        <th class="text-center">Star Votes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Gloria Irvin</td>
+                        <td><code>gloirv1155@yahoo.com</code></td>
+                        <td>(813) 362-0102</td>
+                        <td class="text-center">34476</td>
+                        <td class="text-center">2026-11-13</td>
+                        <td class="text-center">7</td>
+                        <td class="text-center">7</td>
+                    </tr>
+                    <tr>
+                        <td>Natalia Cox</td>
+                        <td><code>naticox19@gmail.com</code></td>
+                        <td>(352) 875-5877</td>
+                        <td class="text-center">34472</td>
+                        <td class="text-center">2026-11-05</td>
+                        <td class="text-center">6</td>
+                        <td class="text-center">3</td>
+                    </tr>
+                    <tr>
+                        <td>Debra Keen</td>
+                        <td><code>keenkopper@aol.com</code></td>
+                        <td>(352) 732-3451</td>
+                        <td class="text-center">34482</td>
+                        <td class="text-center">2026-11-14</td>
+                        <td class="text-center">6</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Princess Swan</td>
+                        <td><code>pswan9393@gmail.com</code></td>
+                        <td>(352) 673-5435</td>
+                        <td class="text-center">34472</td>
+                        <td class="text-center">2026-11-15</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>melissa george</td>
+                        <td><code>milissageorge@yahoo.com</code></td>
+                        <td>(352) 895-9763</td>
+                        <td class="text-center">34480</td>
+                        <td class="text-center">2026-11-06</td>
+                        <td class="text-center">4</td>
+                        <td class="text-center">3</td>
+                    </tr>
+                    <tr>
+                        <td>Kimberly Colavito</td>
+                        <td><code>kimrc11@aol.com</code></td>
+                        <td>(352) 233-8556</td>
+                        <td class="text-center">34473</td>
+                        <td class="text-center">2026-11-08</td>
+                        <td class="text-center">4</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Sonya Masterson</td>
+                        <td><code>sonyamasterson@hotmail.com</code></td>
+                        <td>(417) 251-2240</td>
+                        <td class="text-center">65733</td>
+                        <td class="text-center">2026-11-14</td>
+                        <td class="text-center">4</td>
+                        <td class="text-center">2</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="card">
+        <h2>4. Technical Analysis: Merging Weekend 1 Check-Ins via IP Address</h2>
+        <p>The client inquired:</p>
+        <div class="quote-box">
+            "Is there a way to merge check-ins from the first weekend by the user’s IP address? If so, can we compile a list of all users with 8+ check-ins."
+        </div>
+        
+        <h3>Key Findings:</h3>
+        
+        <p class="finding-title">No IP Addresses Stored in the Database:</p>
+        <p class="finding-text">The database intentionally never stored IP addresses in table schemas to maintain privacy, avoid collecting sensitive tracking data, and keep the database clean.</p>
+        
+        <p class="finding-title">Server Access Log Retention Window:</p>
+        <p class="finding-text">The Linux web server uses standard daily log rotation with 7-day retention (rotate 7). The logs currently on disk begin on November 10. Server access logs for November 6–8 have already been rotated out by the operating system.</p>
+        
+        <p class="finding-title">Mobile Cellular IP Characteristics (CGNAT):</p>
+        <p class="finding-text">Even if raw web logs existed, mobile phones on cellular networks (Verizon, AT&T, T-Mobile) do not have static IP addresses. As tour visitors drive from home to home across Marion County, their phones switch cell towers and obtain different dynamic IP addresses. Additionally, hundreds of mobile devices share the same carrier gateway IP (Carrier-Grade NAT). Thus, IP addresses cannot reliably bind an anonymous mobile check-in to a specific registered individual.</p>
+        
+        <p class="finding-title">The Automatic Browser Sync Already Worked:</p>
+        <p class="finding-text">The app stored visited homes in the device's local storage (localStorage). When visitors who toured in Weekend 1 logged into or opened their pass on that same phone, the app automatically synced those check-ins to their account!</p>
+        
+        <p class="finding-text">This is why Weekend 1 participants like Christina Peters (clpwgp@gmail.com, registered Nov 7) and Devindra Singh (devindrasingh85@gmail.com, registered Nov 8) successfully have their 9 check-ins credited and appear on the 8+ qualifier list.</p>
+    </section>
+
+    <!-- Section 5 -->
+    <section class="card">
+        <h2>5. Home-by-Home Engagement & Voting Summary</h2>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model Home Name</th>
+                        <th>Builder</th>
+                        <th class="text-center">Current Rating</th>
+                        <th class="text-center">Total Votes</th>
+                        <th class="text-center">Total Check-Ins</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Moderni</td>
+                        <td>Bakan Homes, LLC</td>
+                        <td class="text-center">3.68 ★</td>
+                        <td class="text-center">140</td>
+                        <td class="text-center">6</td>
+                    </tr>
+                    <tr>
+                        <td>FUSION+</td>
+                        <td>Bakan Homes, LLC</td>
+                        <td class="text-center">3.61 ★</td>
+                        <td class="text-center">117</td>
+                        <td class="text-center">15</td>
+                    </tr>
+                    <tr>
+                        <td>The Boone</td>
+                        <td>Brije Homes</td>
+                        <td class="text-center">3.57 ★</td>
+                        <td class="text-center">81</td>
+                        <td class="text-center">28</td>
+                    </tr>
+                    <tr>
+                        <td>The Reddick Reserve</td>
+                        <td>CBI Contracting</td>
+                        <td class="text-center">3.59 ★</td>
+                        <td class="text-center">61</td>
+                        <td class="text-center">78</td>
+                    </tr>
+                    <tr>
+                        <td>The Wyrick II</td>
+                        <td>Townsley Construction</td>
+                        <td class="text-center">3.82 ★</td>
+                        <td class="text-center">56</td>
+                        <td class="text-center">125</td>
+                    </tr>
+                    <tr>
+                        <td>Jasmine</td>
+                        <td>Bill Benson Construction</td>
+                        <td class="text-center">3.45 ★</td>
+                        <td class="text-center">48</td>
+                        <td class="text-center">2</td>
+                    </tr>
+                    <tr>
+                        <td>Beechwood</td>
+                        <td>AR Homes by Arthur Rutenberg</td>
+                        <td class="text-center">3.97 ★</td>
+                        <td class="text-center">45</td>
+                        <td class="text-center">77</td>
+                    </tr>
+                    <tr>
+                        <td>Antonia</td>
+                        <td>KP Smart Homes LLC</td>
+                        <td class="text-center">3.76 ★</td>
+                        <td class="text-center">45</td>
+                        <td class="text-center">41</td>
+                    </tr>
+                    <tr>
+                        <td>Golden Hills</td>
+                        <td>Luetgert Development Corp</td>
+                        <td class="text-center">3.63 ★</td>
+                        <td class="text-center">40</td>
+                        <td class="text-center">89</td>
+                    </tr>
+                    <tr>
+                        <td>Sunhaven Reserve</td>
+                        <td>Sunworth Homes</td>
+                        <td class="text-center">3.42 ★</td>
+                        <td class="text-center">32</td>
+                        <td class="text-center">15</td>
+                    </tr>
+                    <tr>
+                        <td>The Aspen</td>
+                        <td>Brije Homes</td>
+                        <td class="text-center">4.61 ★</td>
+                        <td class="text-center">31</td>
+                        <td class="text-center">190</td>
+                    </tr>
+                    <tr>
+                        <td>Rutherford Farmhouse</td>
+                        <td>Secure Built, LLC</td>
+                        <td class="text-center">3.69 ★</td>
+                        <td class="text-center">25</td>
+                        <td class="text-center">39</td>
+                    </tr>
+                    <tr>
+                        <td>Groveland</td>
+                        <td>A.L. Milton Construction</td>
+                        <td class="text-center">2.75 ★</td>
+                        <td class="text-center">19</td>
+                        <td class="text-center">49</td>
+                    </tr>
+                    <tr>
+                        <td>Mustang</td>
+                        <td>The Deltona Corporation</td>
+                        <td class="text-center">3.65 ★</td>
+                        <td class="text-center">19</td>
+                        <td class="text-center">16</td>
+                    </tr>
+                    <tr>
+                        <td>Hemlock</td>
+                        <td>A.L. Milton Construction</td>
+                        <td class="text-center">3.06 ★</td>
+                        <td class="text-center">15</td>
+                        <td class="text-center">29</td>
+                    </tr>
+                    <tr>
+                        <td>The Heritage</td>
+                        <td>Calesa Township</td>
+                        <td class="text-center">3.53 ★</td>
+                        <td class="text-center">14</td>
+                        <td class="text-center">47</td>
+                    </tr>
+                    <tr>
+                        <td>The Olive</td>
+                        <td>Triple Crown Homes</td>
+                        <td class="text-center">3.77 ★</td>
+                        <td class="text-center">12</td>
+                        <td class="text-center">32</td>
+                    </tr>
+                    <tr>
+                        <td>The Whitmore</td>
+                        <td>On Top of the World</td>
+                        <td class="text-center">3.60 ★</td>
+                        <td class="text-center">11</td>
+                        <td class="text-center">41</td>
+                    </tr>
+                    <tr>
+                        <td>Holden</td>
+                        <td>D.R. Horton</td>
+                        <td class="text-center">3.83 ★</td>
+                        <td class="text-center">6</td>
+                        <td class="text-center">9</td>
+                    </tr>
+                    <tr>
+                        <td>Sebastian VIII Craftsman</td>
+                        <td>Curington Homes</td>
+                        <td class="text-center">3.98 ★</td>
+                        <td class="text-center">6</td>
+                        <td class="text-center">50</td>
+                    </tr>
+                    <tr>
+                        <td>The Don Crystal</td>
+                        <td>Dream Custom Homes of Citrus</td>
+                        <td class="text-center">2.00 ★</td>
+                        <td class="text-center">5</td>
+                        <td class="text-center">0</td>
+                    </tr>
+                    <tr>
+                        <td>Don Valencia</td>
+                        <td>Dream Custom Homes of Citrus</td>
+                        <td class="text-center">3.75 ★</td>
+                        <td class="text-center">4</td>
+                        <td class="text-center">13</td>
+                    </tr>
+                    <tr>
+                        <td>Fort King Townhome</td>
+                        <td>Stentiford Construction</td>
+                        <td class="text-center">5.00 ★</td>
+                        <td class="text-center">2</td>
+                        <td class="text-center">47</td>
+                    </tr>
+                    <tr class="totals-row">
+                        <td>TOTALS</td>
+                        <td>—</td>
+                        <td class="text-center">—</td>
+                        <td class="text-center">834 votes</td>
+                        <td class="text-center">1,038 check-ins</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+    <!-- Modal for image popout -->
+    <div id="imageModal" class="modal" onclick="closeModal(event)">
+        <span class="modal-close" onclick="closeModal(event)">&times;</span>
+        <img class="modal-content" id="modalImg" alt="Breakdown Popout" onclick="event.stopPropagation()">
+    </div>
+
+    <script>
+        function openModal(src) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImg');
+            modalImg.src = src;
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(event) {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
